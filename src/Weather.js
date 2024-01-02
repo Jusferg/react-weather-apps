@@ -4,8 +4,9 @@ import axios from "axios";
 import "./Weather.css";
 
 export default function Weather(props) {
-    const [city, setCity] = useState(props.defaultCity);
     const [weatherData, setWeatherData] = useState({ ready: false });
+    const [city, setCity] = useState(props.defaultCity);
+
     function handleResponse(response) {
         setWeatherData({
             ready: true,
@@ -13,7 +14,7 @@ export default function Weather(props) {
             humidity: response.data.main.humidity,
             date:  new Date(response.data.dt * 1000),
             description:response.data.weather[0].description,
-            iconUrl: "https://ssl.gstatic.com/onebox/weather/64/rain_light.png", 
+            iconUrl: `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`, 
             wind: response.data.wind.speed,
             city: response.data.name,
         });     
@@ -21,8 +22,7 @@ export default function Weather(props) {
 
     function search() {
         const apiKey = "42fc9ffc1da4d22ab3a123055816708c";
-        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?
-        q=${city}&appid=${apiKey}`
+        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
         axios.get(apiUrl).then(handleResponse);
     
     }
@@ -53,7 +53,7 @@ export default function Weather(props) {
                         </div>
                     </div>
                 </form>
-                <WeatherInfo info={weatherData} />                    
+                <WeatherInfo data={weatherData} />                    
             </div>
         );
     } else {  
